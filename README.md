@@ -1,12 +1,18 @@
-abLib-RobotC
-============
+# AB_RobotCLib
 
 Ashebots RobotC opensource software library, targeted at the NXT platform for use in the FIRST Tech Challenge (FTC)
-(coming soon)
 
-===
-Standards
-===
+
+#### WARNING
+- We're still early in development
+- Things may change or break without warning
+- Features may be broken or incomplete
+
+
+## Standards
+
+
+### Naming Convention
 
 Local variables and functions which aren't exposed to other parts of the program follow the following naming conventions:
 ````c
