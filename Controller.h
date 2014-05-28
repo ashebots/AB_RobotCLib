@@ -2,55 +2,54 @@
   #include "JoystickDriver.c"
 #endif
 
-//THE ORDER OF THIS ENUM IS CRITICAL.
-//NO NO TOUCHY
+//Set a variable for a control to one of these.
 typedef enum
 {
-  X1 = 1,
-  A1,
-  B1,
-  Y1,
-  LeftBumper1,
-  RightBumper1,
-  LeftTrigger1,
-  RightTrigger1,
-  LeftArrow1,
-  RightArrow1,
-  LeftJoy1,
-  RightJoy1,
-  HatUp1,
-  HatUpRight1,
-  HatRight1,
-  HatDownRight1,
-  HatDown1,
-  HatDownLeft1,
-  HatLeft1,
-  HatUpLeft1, //20
+  X1            = 1, //First controller
+  A1            = 2,
+  B1            = 3,
+  Y1            = 4,
+  LeftBumper1   = 5,
+  RightBumper1  = 6,
+  LeftTrigger1  = 7,
+  RightTrigger1 = 8,
+  LeftArrow1    = 9,
+  RightArrow1   = 10,
+  LeftJoy1      = 11,
+  RightJoy1     = 12,
+  HatUp1        = 13,
+  HatUpRight1   = 14,
+  HatRight1     = 15,
+  HatDownRight1 = 16,
+  HatDown1      = 17,
+  HatDownLeft1  = 18,
+  HatLeft1      = 19,
+  HatUpLeft1    = 20,
 
-  X2, //21
-  A2,
-  B2,
-  Y2,
-  LeftBumper2,
-  RightBumper2,
-  LeftTrigger2,
-  RightTrigger2,
-  LeftArrow2,
-  RightArrow2,
-  LeftJoy2,
-  RightJoy2,
-  HatUp2,
-  HatUpRight2,
-  HatRight2,
-  HatDownRight2,
-  HatDown2,
-  HatDownLeft2,
-  HatLeft2,
-  HatUpLeft2, //40
+  X2            = 21, //Second controller
+  A2            = 22,
+  B2            = 23,
+  Y2            = 24,
+  LeftBumper2   = 25,
+  RightBumper2  = 26,
+  LeftTrigger2  = 27,
+  RightTrigger2 = 28,
+  LeftArrow2    = 29,
+  RightArrow2   = 30,
+  LeftJoy2      = 31,
+  RightJoy2     = 32,
+  HatUp2        = 33,
+  HatUpRight2   = 34,
+  HatRight2     = 35,
+  HatDownRight2 = 36,
+  HatDown2      = 37,
+  HatDownLeft2  = 38,
+  HatLeft2      = 39,
+  HatUpLeft2    = 40,
 } Gamepad;
 
 
-bool ButtonState(Gamepad button)
+bool AB_ButtonState(Gamepad button)
 {
   const int lastGamepad1Control = HatUpLeft1; //A "Control" encompasses all the buttons + the 8 different TopHats.
 

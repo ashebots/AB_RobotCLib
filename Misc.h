@@ -9,15 +9,15 @@ typedef struct
 {
   bool defaultState;
   bool toggledLast;
-} OneShotData;
+} AB_OneShotData;
 
-void InitOneShot(OneShotData &oneShotData, bool defaultState = false)
+void AB_InitOneShot(AB_OneShotData &oneShotData, bool defaultState = false)
 {
   oneShotData.defaultState = defaultState;
   oneShotData.toggledLast = false;
 }
 
-bool OneShot(OneShotData &oneShotData, bool input)
+bool AB_OneShot(AB_OneShotData &oneShotData, bool input)
 {
   if (input == true)
   {
@@ -43,15 +43,15 @@ typedef struct
 {
   bool toggleState;
   bool toggledLast;
-} ToggleData;
+} AB_ToggleData;
 
-void InitToggle(ToggleData &toggleData, bool state = false)
+void AB_InitToggle(AB_ToggleData &toggleData, bool state = false)
 {
   toggleData.toggleState = state;
   toggleData.toggledLast = false;
 }
 
-bool Toggle(ToggleData &toggleData, bool input)
+bool AB_Toggle(AB_ToggleData &toggleData, bool input)
 {
   if (input == true)
   {
@@ -72,12 +72,12 @@ bool Toggle(ToggleData &toggleData, bool input)
 /*
 task main()
 {
-  ToggleData myButtonToggle;
-  InitToggle(myButtonToggle);
+  AB_ToggleData myButtonToggle;
+  AB_InitToggle(myButtonToggle);
 
   while (true)
   {
-    if (Toggle(myButtonToggle, joy1Btn(3))
+    if (AB_Toggle(myButtonToggle, joy1Btn(3))
     {
       motor[myMotor] = 100;
     }
@@ -91,19 +91,19 @@ task main()
 
 //If you want a value with a range of -127 to 127 to be scaled
 //down to a value with a range of -100 to 100, do
-//Scale(input, 127, 100);
-int Scale(int input, int inMax, int outMax)
+//AB_Scale(input, 127, 100);
+int AB_Scale(int input, int inMax, int outMax)
 {
   return (int)input * outMax / inMax;
 }
-float Scale(float input, float inMax, float outMax)
+float AB_Scale(float input, float inMax, float outMax)
 {
   return (float)input * outMax / inMax;
 }
 
 
 //Returns 0 if input is between min and max, otherwise just returns input.
-int deadzone(int input, int min, int max)
+int AB_Deadzone(int input, int min, int max)
 {
   int output = input;
   if ((input > min) && (input < max))
@@ -114,7 +114,7 @@ int deadzone(int input, int min, int max)
 }
 
 //Clamps a number between a low number and a high number.
-int clamp(int input, int min, int max)
+int AB_Clamp(int input, int min, int max)
 {
   if (input > max)
   {
@@ -126,7 +126,7 @@ int clamp(int input, int min, int max)
   }
   return(input);
 }
-float clamp(float input, float min, float max)
+float AB_Clamp(float input, float min, float max)
 {
   if (input > max)
   {
@@ -138,7 +138,7 @@ float clamp(float input, float min, float max)
   }
   return(input);
 }
-long clamp(long input, long min, long max)
+long AB_Clamp(long input, long min, long max)
 {
   if (input > max)
   {
@@ -152,37 +152,37 @@ long clamp(long input, long min, long max)
 }
 
 //Swaps the values of two variables
-void swap(int &a, int &b)
+void AB_Swap(int &a, int &b)
 {
   int c = a;
   a = b;
   b = c;
 }
-void swap(float &a, float &b)
+void AB_Swap(float &a, float &b)
 {
   float c = a;
   a = b;
   b = c;
 }
-void swap(string &a, string &b)
+void AB_Swap(string &a, string &b)
 {
   string c = a;
   a = b;
   b = c;
 }
-void swap(bool &a, bool &b)
+void AB_Swap(bool &a, bool &b)
 {
   bool c = a;
   a = b;
   b = c;
 }
-void swap(long &a, long &b)
+void AB_Swap(long &a, long &b)
 {
   long c = a;
   a = b;
   b = c;
 }
 
-int AbsDiff(int num1, int num2){
+int AB_Diff(int num1, int num2){
 	return abs(num1 - num2);
 }

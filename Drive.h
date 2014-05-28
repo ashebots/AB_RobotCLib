@@ -11,31 +11,31 @@ typedef struct
   tMotor frontRight;
   tMotor backLeft;
   tMotor backRight;
-} DriveWheels;
+} AB_DriveWheels;
 
 typedef struct
 {
   int drivePower;
   int driveClamp;
-} DriveData;
+} AB_DriveData;
 
 typedef struct
 {
-  DriveWheels wheels;
-  DriveData data;
-} DriveChassis;
+  AB_DriveWheels wheels;
+  AB_DriveData data;
+} AB_DriveChassis;
 
 
 
-void ArcadeDrive(DriveChassis chassis, int y, int x)
+void AB_ArcadeDrive(AB_DriveChassis chassis, int y, int x)
 {
   //We only accept a range of -100 to 100. Scale joystick values accordingly.
-  y = clamp(y, -100, 100);
-  x = clamp(x, -100, 100);
+  y = AB_Clamp(y, -100, 100);
+  x = AB_Clamp(x, -100, 100);
   int left = (y + x) * chassis.data.drivePower / 100;
   int right = (y + -x) * chassis.data.drivePower / 100;
-  motor[chassis.wheels.left] = clamp(left, -100, 100);
-  motor[chassis.wheels.right] = clamp(right, -100, 100);
+  motor[chassis.wheels.left] = AB_Clamp(left, -100, 100);
+  motor[chassis.wheels.right] = AB_Clamp(right, -100, 100);
 
   return;
 }
@@ -44,7 +44,7 @@ void ArcadeDrive(DriveChassis chassis, int y, int x)
 //We couldn't tell much of a difference.
 //This function was ported from the OpenVex library.
 //http://personalpages.tds.net/~jwbacon/OpenVex/
-void ArcadeDriveFancy(DriveChassis chassis, int y, int x)
+void AB_ArcadeDriveFancy(AB_DriveChassis chassis, int y, int x)
 {
   int left_power;
 	int right_power;
@@ -67,7 +67,7 @@ void ArcadeDriveFancy(DriveChassis chassis, int y, int x)
 	 *  x,y to -x,y.  ( Quadrant 1 to 2 )
 	 */
 	if ( x < 0 )    /* Swap for quadrant 2 */
-	  swap(left_power,right_power);
+	  AB_Swap(left_power,right_power);
   }
   else    /* Quadrants 3 and 4 */
   {
@@ -79,7 +79,7 @@ void ArcadeDriveFancy(DriveChassis chassis, int y, int x)
 		 *  only negated.
 		 */
 	  if ( x >= 0 )   /* Swap for quadrant 4 only */
-	    swap(left_power,right_power);
+	    AB_Swap(left_power,right_power);
 
 	  /* Negate for quadrants 3 and 4 */
 	  left_power = -left_power;
@@ -89,15 +89,15 @@ void ArcadeDriveFancy(DriveChassis chassis, int y, int x)
   motor[chassis.wheels.right] = right_power;
 }
 
-void TankDrive(DriveChassis chassis, int left, int right)
+void AB_TankDrive(AB_DriveChassis chassis, int left, int right)
 {
-  motor[chassis.wheels.left] = clamp(left * chassis.data.drivePower / 100, -100, 100);
-  motor[chassis.wheels.right] = clamp(right * chassis.data.drivePower / 100, -100, 100);
+  motor[chassis.wheels.left] = AB_Clamp(left * chassis.data.drivePower / 100, -100, 100);
+  motor[chassis.wheels.right] = AB_Clamp(right * chassis.data.drivePower / 100, -100, 100);
 
   return;
 }
 
-void Init2WheelChassis(DriveChassis &chassis, tMotor left, tMotor right)
+void AB_Init2WheelChassis(AB_DriveChassis &chassis, tMotor left, tMotor right)
 {
   chassis.wheels.left = left;
   chassis.wheels.right = right;
@@ -108,12 +108,12 @@ void Init2WheelChassis(DriveChassis &chassis, tMotor left, tMotor right)
   return;
 }
 
-void Init3WheelChassis()
+void AB_Init3WheelChassis()
 {
 
 }
 
-void Init4WheelChassis(DriveChassis &chassis, tMotor frontLeft, tMotor frontRight, tMotor backLeft, tMotor backRight)
+void AB_Init4WheelChassis(AB_DriveChassis &chassis, tMotor frontLeft, tMotor frontRight, tMotor backLeft, tMotor backRight)
 {
   chassis.wheels.frontLeft = frontLeft;
   chassis.wheels.frontRight = frontRight;
@@ -126,19 +126,19 @@ void Init4WheelChassis(DriveChassis &chassis, tMotor frontLeft, tMotor frontRigh
   return;
 }
 
-void SetDrivePower(DriveChassis &chassis, int power)
+void AB_SetDrivePower(AB_DriveChassis &chassis, int power)
 {
-  chassis.data.drivePower = clamp(power, 1, 100);
+  chassis.data.drivePower = AB_Clamp(power, 1, 100);
 }
 
 /*
 task main()
 {
-  DriveChassis chassis;
-  Init2WheelChassis(chassis, myLeftWheel, myRightWheel);
+  AB_DriveChassis chassis;
+  AB_Init2WheelChassis(chassis, myLeftWheel, myRightWheel);
 
-  ArcadeDrive(chassis, 70, 20);
+  AB_ArcadeDrive(chassis, 70, 20);
   --OR--
-  TankDrive(chassis, 20, 70);
+  AB_TankDrive(chassis, 20, 70);
 }
 */
