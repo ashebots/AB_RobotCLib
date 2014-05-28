@@ -34,7 +34,7 @@ int fir_filter(fir_data &data, int input)
 {
   data.history[data.position] = input; //Put our new value into the history
 
-  int allValues; //Average
+  int allValues = 0; //Average
   for (int i=0;i<data.size;i++)
   {
     allValues += data.history[i];
