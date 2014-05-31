@@ -16,7 +16,7 @@ typedef struct
 typedef struct
 {
   int drivePower;
-  int driveClamp;
+  int rotationPower;
 } AB_DriveData;
 
 typedef struct
@@ -46,6 +46,8 @@ void AB_ArcadeDrive(AB_DriveChassis chassis, int y, int x)
 //http://personalpages.tds.net/~jwbacon/OpenVex/
 void AB_ArcadeDriveFancy(AB_DriveChassis chassis, int y, int x)
 {
+	y = AB_Clamp(y, -100, 100);
+  x = AB_Clamp(x, -100, 100);
   int left_power;
 	int right_power;
 	int abs_x = abs(x);
@@ -97,6 +99,42 @@ void AB_TankDrive(AB_DriveChassis chassis, int left, int right)
   return;
 }
 
+void AB_OmniDrive(AB_DriveChassis chassis, int x, int y, int rotation = 0)
+{
+	x = AB_Clamp(x, -100, 100);
+	y = AB_Clamp(y, -100, 100);
+
+	int m1 = (-x) + (-y);
+	int m2 = (-x) + (y);
+	int m3 = (x) + (-y);
+	int m4 = (x) + (y);
+
+	m1 = m1 * chassis.data.drivePower / 100;
+	m2 = m2 * chassis.data.drivePower / 100;
+	m3 = m3 * chassis.data.drivePower / 100;
+	m4 = m4 * chassis.data.drivePower / 100;
+
+	if (rotation != 0) //Only bother to apply rotation if one was supplied
+	{
+		rotation = rotation * chassis.data.rotationPower / 100; //rotationPower can be a value 0 to 100, set by AB_SetRotationPower(int)
+
+		m1 = m1 - rotation;
+		m2 = m2 - rotation;
+		m3 = m3 - rotation;
+		m4 = m4 - rotation;
+	}
+
+  m1 = AB_Clamp(m1, -100, 100);
+	m2 = AB_Clamp(m2, -100, 100);
+	m3 = AB_Clamp(m3, -100, 100);
+	m4 = AB_Clamp(m4, -100, 100);
+
+	motor[chassis.wheels.frontLeft] = m1;
+	motor[chassis.wheels.frontRight] = m2;
+	motor[chassis.wheels.backLeft] = m3;
+	motor[chassis.wheels.backRight] = m4;
+}
+
 void AB_Init2WheelChassis(AB_DriveChassis &chassis, tMotor left, tMotor right)
 {
   chassis.wheels.left = left;
@@ -121,6 +159,7 @@ void AB_Init4WheelChassis(AB_DriveChassis &chassis, tMotor frontLeft, tMotor fro
   chassis.wheels.backRight = backRight;
 
   chassis.data.drivePower = 100;
+  chassis.data.rotationPower = 100;
 
 
   return;
@@ -129,6 +168,12 @@ void AB_Init4WheelChassis(AB_DriveChassis &chassis, tMotor frontLeft, tMotor fro
 void AB_SetDrivePower(AB_DriveChassis &chassis, int power)
 {
   chassis.data.drivePower = AB_Clamp(power, 1, 100);
+}
+
+//Only used in holonomic (omniwheel) driving.
+void AB_SetRotationPower(AB_DriveChassis &chassis, int power)
+{
+  chassis.data.rotationPower = AB_Clamp(power, 1, 100);
 }
 
 /*
