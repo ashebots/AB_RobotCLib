@@ -54,6 +54,11 @@ int AB_FirFilter(AB_FirData &data, int input)
   return average; //REMEMBER TO MAKE SURE WE'RE FULL!
 }
 
+bool AB_FirFull(AB_FirData data)
+{
+	return data.full;
+}
+
 //FINITE IMPULSE RESPONSE FILTER usage example
 /*
 task main()
