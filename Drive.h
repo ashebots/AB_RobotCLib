@@ -27,7 +27,7 @@ typedef struct
 
 
 
-void AB_ArcadeDrive(AB_DriveChassis chassis, int y, int x)
+void AB_ArcadeDrive(AB_DriveChassis chassis, int x, int y)
 {
   //We only accept a range of -100 to 100. Scale joystick values accordingly.
   y = AB_Clamp(y, -100, 100);
@@ -44,7 +44,7 @@ void AB_ArcadeDrive(AB_DriveChassis chassis, int y, int x)
 //We couldn't tell much of a difference.
 //This function was ported from the OpenVex library.
 //http://personalpages.tds.net/~jwbacon/OpenVex/
-void AB_ArcadeDriveFancy(AB_DriveChassis chassis, int y, int x)
+void AB_ArcadeDriveFancy(AB_DriveChassis chassis, int x, int y)
 {
 	y = AB_Clamp(y, -100, 100);
   x = AB_Clamp(x, -100, 100);

@@ -81,3 +81,8 @@ bool AB_ButtonState(Gamepad button)
     }
   }
 }
+
+int AB_ScaleJoystick(int joystickAxis)
+{
+	return AB_Scale(joystickAxis, 127, 100);
+}
