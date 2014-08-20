@@ -1,6 +1,9 @@
 #ifndef getJoystickSettings
   #include "JoystickDriver.c"
 #endif
+#ifndef MISC_DEFINED
+  #include "Misc.h"
+#endif
 
 //Set a variable for a control to one of these.
 typedef enum
