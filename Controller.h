@@ -1,10 +1,13 @@
-#pragma systemFile
-#pragma once
+#pragma systemFile //This is so the compiler doesn't complain about unused functions
+#pragma once //This is to make sure we don't include the same module twice
 
+//Make sure we load the joystick driver
 #ifndef getJoystickSettings
   #include "JoystickDriver.c"
 #endif
-#ifndef MISC_DEFINED
+
+//Make sure we load the Misc module
+#ifndef AB_MISC_MODULE
   #include "Misc.h"
 #endif
 

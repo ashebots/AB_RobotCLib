@@ -1,9 +1,8 @@
-#pragma systemFile
-#pragma once
+#pragma systemFile //This is so the compiler doesn't complain about unused functions
+#pragma once //This is to make sure we don't include the same module twice
 
-#ifndef MISC_DEFINED
-  #include "Misc.h"
-#endif
+//Make sure we load the Misc module
+#include "Misc.h"
 
 //NOTE: We sorta use motor "power" and motor "speed" interchangeably here. Deal with it.
 
