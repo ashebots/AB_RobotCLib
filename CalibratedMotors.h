@@ -1,3 +1,5 @@
+#pragma systemFile
+#pragma once
 
 typedef struct
 {

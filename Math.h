@@ -1,3 +1,6 @@
+#pragma systemFile
+#pragma once
+
 /*
 =========================================
 =THIS FILE IS FOR MATHY FUNCTIONS! WOOO.=

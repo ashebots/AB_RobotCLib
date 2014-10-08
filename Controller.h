@@ -1,3 +1,6 @@
+#pragma systemFile
+#pragma once
+
 #ifndef getJoystickSettings
   #include "JoystickDriver.c"
 #endif

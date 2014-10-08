@@ -1,3 +1,6 @@
+#pragma systemFile
+#pragma once
+
 #define MISC_DEFINED
 
 //This file is for semi-generic functions which we

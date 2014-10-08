@@ -1,3 +1,5 @@
+#pragma systemFile
+#pragma once
 #ifndef MISC_DEFINED
   #include "Misc.h"
 #endif
