@@ -1,3 +1,6 @@
+//This is to make sure we don't include the same module twice
+#pragma once
+
 /*
 =========================================
 =THIS FILE IS FOR MATHY FUNCTIONS! WOOO.=

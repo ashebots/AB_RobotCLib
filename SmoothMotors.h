@@ -1,6 +1,8 @@
-#ifndef MISC_DEFINED
-  #include "Misc.h"
-#endif
+//This is to make sure we don't include the same module twice
+#pragma once
+
+//Make sure we load the Misc module
+#include "Misc.h"
 
 //NOTE: We sorta use motor "power" and motor "speed" interchangeably here. Deal with it.
 

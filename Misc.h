@@ -1,4 +1,5 @@
-#define MISC_DEFINED
+//This is to make sure we don't include the same module twice
+#pragma once
 
 //This file is for semi-generic functions which we
 //don't need to look at very often.
