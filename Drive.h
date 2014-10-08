@@ -105,7 +105,7 @@ void AB_ArcadeDrive(AB_DriveChassis chassis, int x, int y)
 	}
 	else
 	{
-		PlaySound(soundException);
+		playSound(soundException);
 	}
 }
 
@@ -189,7 +189,7 @@ void AB_TankDrive(AB_DriveChassis chassis, int leftInput, int rightInput)
 	}
 	else
 	{
-		PlaySound(soundException);
+		playSound(soundException);
 	}
 }
 
@@ -255,7 +255,7 @@ void AB_OmniDrive(AB_DriveChassis chassis, int x, int y, int rotation = 0)
 	//We weren't given an omni chassis
 	else
 	{
-		PlaySound(soundException);
+		playSound(soundException);
 	}
 }
 
@@ -302,7 +302,7 @@ void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowe
 	else
 	{
 		//We have an unsupported drive type, and should just abort the mission
-		PlaySound(soundException);
+		playSound(soundException);
 		return;
 	}
 
