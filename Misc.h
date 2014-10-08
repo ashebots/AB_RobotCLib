@@ -141,18 +141,6 @@ float AB_Clamp(float input, float min, float max)
   }
   return(input);
 }
-long AB_Clamp(long input, long min, long max)
-{
-  if (input > max)
-  {
-    input = max;
-  }
-  else if (input < min)
-  {
-    input = min;
-  }
-  return(input);
-}
 
 //Swaps the values of two variables
 void AB_Swap(int &a, int &b)
@@ -176,12 +164,6 @@ void AB_Swap(string &a, string &b)
 void AB_Swap(bool &a, bool &b)
 {
   bool c = a;
-  a = b;
-  b = c;
-}
-void AB_Swap(long &a, long &b)
-{
-  long c = a;
   a = b;
   b = c;
 }
