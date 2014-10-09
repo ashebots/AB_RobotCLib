@@ -15,7 +15,7 @@ const int AB_defaultEncoderTicksPerRotation = 1440; //Tetrix
  // TYPEDEFS //
 //----------//
 
-typedef enum
+typedef enum AB_DriveType
 {
 	AB_TANK_DRIVE, //Differential drive. 2, 4, or 6 wheels, all facing one direction
 
@@ -27,7 +27,7 @@ typedef enum
 	AB_MECANUM_DRIVE,
 
 	AB_NUM_DRIVETYPES
-} AB_DriveType;
+};
 
 typedef struct
 {

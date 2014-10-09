@@ -12,7 +12,7 @@
 #endif
 
 //Set a variable for a control to one of these.
-typedef enum
+typedef enum Gamepad
 {
   X1            = 1, //First controller
   A1            = 2,
@@ -55,7 +55,7 @@ typedef enum
   HatDownLeft2  = 38,
   HatLeft2      = 39,
   HatUpLeft2    = 40,
-} Gamepad;
+};
 
 
 bool AB_ButtonState(Gamepad button)
