@@ -167,7 +167,6 @@ int AB_FindHighest8( //Should this be called "FindLargest"?
 ) {
 	const int MAX_NUMBERS = 8;
 	int numbers[MAX_NUMBERS];
-
 	numbers[0] = num0;
 	numbers[1] = num1;
 	numbers[2] = num2;
@@ -185,4 +184,34 @@ int AB_FindHighest8( //Should this be called "FindLargest"?
 		}
 	}
 	return highest;
+}
+
+
+void AB_TheFunctionThatScalesThings8(
+	int scaleTarget,
+	int &num0,
+	int &num1, //The first two don't need a default value, since we need atleast 2
+	int &num2 = 0,
+	int &num3 = 0,
+	int &num4 = 0,
+	int &num5 = 0,
+	int &num6 = 0,
+	int &num7 = 0
+) {
+	const int MAX_NUMBERS = 8;
+	int numbers[MAX_NUMBERS];
+	numbers[0] = num0;
+	numbers[1] = num1;
+	numbers[2] = num2;
+	numbers[3] = num3;
+	numbers[4] = num4;
+	numbers[5] = num5;
+	numbers[6] = num6;
+	numbers[7] = num7;
+
+	int scaleFrom = AB_FindHighest8(num0, num1, num2, num3, num4, num5, num6, num7);
+
+	for (int i = 0; i < MAX_NUMBERS; i++) {
+		numbers[i] = AB_Scale(numbers[i], scaleFrom, scaleTarget);
+	}
 }
