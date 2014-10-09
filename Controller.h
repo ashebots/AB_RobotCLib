@@ -1,4 +1,4 @@
-//#pragma systemFile //This is so the compiler doesn't complain about unused functions
+#pragma systemFile //This is so the compiler doesn't complain about unused functions
 #pragma once //This is to make sure we don't include the same module twice
 
 //Make sure we load the joystick driver

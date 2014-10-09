@@ -8,86 +8,68 @@
 //One shotting
 typedef struct
 {
-  bool defaultState;
-  bool toggledLast;
+	bool defaultState;
+	bool toggledLast;
 } AB_OneShotData;
 
 void AB_InitOneShot(AB_OneShotData &oneShotData, bool defaultState = false)
 {
-  oneShotData.defaultState = defaultState;
-  oneShotData.toggledLast = false;
+	oneShotData.defaultState = defaultState;
+	oneShotData.toggledLast = false;
 }
 
 bool AB_OneShot(AB_OneShotData &oneShotData, bool input)
 {
-  if (input == true)
-  {
-    if (oneShotData.toggledLast == false)
-    {
-      oneShotData.toggledLast = true;
-      return !oneShotData.defaultState;
-    }
-    else
-    {
-      return oneShotData.defaultState;
-    }
-  }
-  else
-  {
-    oneShotData.toggledLast = false;
-    return oneShotData.defaultState;
-  }
+	if (input == true)
+	{
+		if (oneShotData.toggledLast == false)
+		{
+			oneShotData.toggledLast = true;
+			return !oneShotData.defaultState;
+		}
+		else
+		{
+			return oneShotData.defaultState;
+		}
+	}
+	else
+	{
+		oneShotData.toggledLast = false;
+		return oneShotData.defaultState;
+	}
 }
 
 //Toggling
 typedef struct
 {
-  bool toggleState;
-  bool toggledLast;
+	bool toggleState;
+	bool toggledLast;
 } AB_ToggleData;
 
 void AB_InitToggle(AB_ToggleData &toggleData, bool state = false)
 {
-  toggleData.toggleState = state;
-  toggleData.toggledLast = false;
+	toggleData.toggleState = state;
+	toggleData.toggledLast = false;
 }
 
 bool AB_Toggle(AB_ToggleData &toggleData, bool input)
 {
-  if (input == true)
-  {
-    if (toggleData.toggledLast == false)
-    {
-      toggleData.toggleState = !toggleData.toggleState;
+	if (input == true)
+	{
+		if (toggleData.toggledLast == false)
+		{
+			toggleData.toggleState = !toggleData.toggleState;
 
-      toggleData.toggledLast = true;
-    }
-  }
-  else
-  {
-    toggleData.toggledLast = false;
-  }
+			toggleData.toggledLast = true;
+		}
+	}
+	else
+	{
+		toggleData.toggledLast = false;
+	}
 
-  return toggleData.toggleState;
+	return toggleData.toggleState;
 }
-/*
-task main()
-{
-  AB_ToggleData myButtonToggle;
-  AB_InitToggle(myButtonToggle);
-
-  while (true)
-  {
-    if (AB_Toggle(myButtonToggle, joy1Btn(3))
-    {
-      motor[myMotor] = 100;
-    }
-    else
-    {
-      motor[myMotor] = -100;
-    }
-}
-*/
 
 
 //If you want a value with a range of -127 to 127 to be scaled
@@ -95,77 +77,112 @@ task main()
 //AB_Scale(input, 127, 100);
 int AB_Scale(int input, int inMax, int outMax)
 {
-  return (int)input * outMax / inMax;
+	return (int)input * outMax / inMax;
 }
 float AB_Scale(float input, float inMax, float outMax)
 {
-  return (float)input * outMax / inMax;
+	return (float)input * outMax / inMax;
 }
 
 
-//Returns 0 if input is between min and max, otherwise just returns input.
+//!Returns 0 if input is between min and max, otherwise just returns input.
 int AB_Deadzone(int input, int min, int max)
 {
-  int output = input;
-  if ((input > min) && (input < max))
-  {
-    output = 0;
-  }
-  return output;
+	int output = input;
+	if ((input > min) && (input < max))
+	{
+		output = 0;
+	}
+	return output;
 }
 
-//Clamps a number between a low number and a high number.
+
+//!Clamps a number between a low number and a high number.
 int AB_Clamp(int input, int min, int max)
 {
-  if (input > max)
-  {
-    input = max;
-  }
-  else if (input < min)
-  {
-    input = min;
-  }
-  return(input);
+	if (input > max)
+	{
+		input = max;
+	}
+	else if (input < min)
+	{
+		input = min;
+	}
+	return(input);
 }
 float AB_Clamp(float input, float min, float max)
 {
-  if (input > max)
-  {
-    input = max;
-  }
-  else if (input < min)
-  {
-    input = min;
-  }
-  return(input);
+	if (input > max)
+	{
+		input = max;
+	}
+	else if (input < min)
+	{
+		input = min;
+	}
+	return(input);
 }
 
-//Swaps the values of two variables
+//!Swaps the values of two variables
 void AB_Swap(int &a, int &b)
 {
-  int c = a;
-  a = b;
-  b = c;
+	int c = a;
+	a = b;
+	b = c;
 }
 void AB_Swap(float &a, float &b)
 {
-  float c = a;
-  a = b;
-  b = c;
+	float c = a;
+	a = b;
+	b = c;
 }
 void AB_Swap(string &a, string &b)
 {
-  string c = a;
-  a = b;
-  b = c;
+	string c = a;
+	a = b;
+	b = c;
 }
 void AB_Swap(bool &a, bool &b)
 {
-  bool c = a;
-  a = b;
-  b = c;
+	bool c = a;
+	a = b;
+	b = c;
 }
 
+//! Get the absolute difference between two numbers
 int AB_Diff(int num1, int num2){
 	return abs(num1 - num2);
+}
+
+
+int AB_FindHighest8( //Should this be called "FindLargest"?
+	int num0,
+	int num1, //The first two don't need a default value, since we need atleast 2 to find the highest.
+	int num2 = 0,
+	int num3 = 0,
+	int num4 = 0,
+	int num5 = 0,
+	int num6 = 0,
+	int num7 = 0
+) {
+	const int MAX_NUMBERS = 8;
+	int numbers[MAX_NUMBERS];
+
+	numbers[0] = num0;
+	numbers[1] = num1;
+	numbers[2] = num2;
+	numbers[3] = num3;
+	numbers[4] = num4;
+	numbers[5] = num5;
+	numbers[6] = num6;
+	numbers[7] = num7;
+
+	int highest = 0;
+
+	for (int i = 0; i < MAX_NUMBERS; i++) {
+		if (numbers[i] > highest) {
+			highest = numbers[i];
+		}
+	}
+	return highest;
 }
