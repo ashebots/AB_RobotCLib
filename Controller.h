@@ -1,4 +1,4 @@
-#pragma systemFile //This is so the compiler doesn't complain about unused functions
+//#pragma systemFile //This is so the compiler doesn't complain about unused functions
 #pragma once //This is to make sure we don't include the same module twice
 
 //Make sure we load the joystick driver
@@ -12,7 +12,7 @@
 #endif
 
 //Set a variable for a control to one of these.
-typedef enum Gamepad
+typedef enum AB_Gamepad
 {
   X1            = 1, //First controller
   A1            = 2,
@@ -58,7 +58,7 @@ typedef enum Gamepad
 };
 
 
-bool AB_ButtonState(Gamepad button)
+bool AB_ButtonState(AB_Gamepad button)
 {
   const int lastGamepad1Control = HatUpLeft1; //A "Control" encompasses all the buttons + the 8 different TopHats.
 
@@ -91,6 +91,9 @@ bool AB_ButtonState(Gamepad button)
   }
 }
 
+/*!
+Scales a value with a max of 127 down to 100. Useful for scaling raw joystick axes before using them for driving.
+*/
 int AB_ScaleJoystick(int joystickAxis)
 {
 	return AB_Scale(joystickAxis, 127, 100);
