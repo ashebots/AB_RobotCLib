@@ -5,7 +5,7 @@
 
 #ifndef AB_CORE_MODULE
 #include "Core.h"
-#warning "AB_RobotCLib: Please include the core module before including any other module(s)."
+#warning "AB_RobotCLib: Please include the Core.h module before including any other module(s)."
 #endif
 
 //This file is for semi-generic functions which we
@@ -162,7 +162,12 @@ int AB_Diff(int num1, int num2){
 }
 
 
-int AB_FindHighest8( //Should this be called "FindLargest"?
+/*!
+Searches through a list of numbers and returns the one farthest from zero.
+
+If a list contains [10, -50, -150, 110], it will return -150.
+*/
+int AB_FindLargest8(
 	int num0,
 	int num1, //The first two don't need a default value, since we need atleast 2 to find the highest.
 	int num2 = 0,
@@ -175,14 +180,14 @@ int AB_FindHighest8( //Should this be called "FindLargest"?
 	const int MAX_NUMBERS = 8;
 	int numbers[] = { num0, num1, num2, num3, num4, num5, num6, num7 };
 
-	int highest = 0;
+	int largest = 0;
 
 	for (int i = 0; i < MAX_NUMBERS; i++) {
-		if (numbers[i] > highest) {
-			highest = numbers[i];
+		if (abs(numbers[i]) > abs(largest)) {
+			largest = numbers[i];
 		}
 	}
-	return highest;
+	return largest;
 }
 
 
@@ -200,7 +205,7 @@ void AB_ScaleDownTo8( //This could prolly do with a new name
 	const int MAX_NUMBERS = 8;
 	int &numbers[] = { num0, num1, num2, num3, num4, num5, num6, num7 };
 
-	int scaleFrom = AB_FindHighest8(num0, num1, num2, num3, num4, num5, num6, num7);
+	int scaleFrom = AB_FindLargest8(num0, num1, num2, num3, num4, num5, num6, num7);
 	if (scaleFrom > scaleTarget) {
 		for (int i = 0; i < MAX_NUMBERS; i++) {
 			numbers[i] = AB_Scale(numbers[i], scaleFrom, scaleTarget);
