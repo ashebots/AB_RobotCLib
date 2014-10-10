@@ -1,6 +1,13 @@
 #pragma systemFile //This is so the compiler doesn't complain about unused functions
 #pragma once //This is to make sure we don't include the same module twice
 
+#define AB_MISC_MODULE
+
+#ifndef AB_CORE_MODULE
+#include "Core.h"
+#warning "AB_RobotCLib: Please include the core module before including any other module(s)."
+#endif
+
 //This file is for semi-generic functions which we
 //don't need to look at very often.
 
@@ -166,15 +173,7 @@ int AB_FindHighest8( //Should this be called "FindLargest"?
 	int num7 = 0
 ) {
 	const int MAX_NUMBERS = 8;
-	int numbers[MAX_NUMBERS];
-	numbers[0] = num0;
-	numbers[1] = num1;
-	numbers[2] = num2;
-	numbers[3] = num3;
-	numbers[4] = num4;
-	numbers[5] = num5;
-	numbers[6] = num6;
-	numbers[7] = num7;
+	int numbers[] = { num0, num1, num2, num3, num4, num5, num6, num7 };
 
 	int highest = 0;
 
@@ -187,31 +186,24 @@ int AB_FindHighest8( //Should this be called "FindLargest"?
 }
 
 
-void AB_TheFunctionThatScalesThings8(
+void AB_ScaleDownTo8( //This could prolly do with a new name
 	int scaleTarget,
 	int &num0,
 	int &num1, //The first two don't need a default value, since we need atleast 2
-	int &num2 = 0,
-	int &num3 = 0,
-	int &num4 = 0,
-	int &num5 = 0,
-	int &num6 = 0,
-	int &num7 = 0
+	int &num2 = AB_NULL_INT,
+	int &num3 = AB_NULL_INT,
+	int &num4 = AB_NULL_INT,
+	int &num5 = AB_NULL_INT,
+	int &num6 = AB_NULL_INT,
+	int &num7 = AB_NULL_INT
 ) {
 	const int MAX_NUMBERS = 8;
-	int numbers[MAX_NUMBERS];
-	numbers[0] = num0;
-	numbers[1] = num1;
-	numbers[2] = num2;
-	numbers[3] = num3;
-	numbers[4] = num4;
-	numbers[5] = num5;
-	numbers[6] = num6;
-	numbers[7] = num7;
+	int &numbers[] = { num0, num1, num2, num3, num4, num5, num6, num7 };
 
 	int scaleFrom = AB_FindHighest8(num0, num1, num2, num3, num4, num5, num6, num7);
-
-	for (int i = 0; i < MAX_NUMBERS; i++) {
-		numbers[i] = AB_Scale(numbers[i], scaleFrom, scaleTarget);
+	if (scaleFrom > scaleTarget) {
+		for (int i = 0; i < MAX_NUMBERS; i++) {
+			numbers[i] = AB_Scale(numbers[i], scaleFrom, scaleTarget);
+		}
 	}
 }
