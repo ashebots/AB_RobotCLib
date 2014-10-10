@@ -167,7 +167,7 @@ Searches through a list of numbers and returns the one farthest from zero.
 
 If a list contains [10, -50, -150, 110], it will return -150.
 */
-int AB_FindLargest8(
+int AB_FindLargest_8(
 	int num0,
 	int num1, //The first two don't need a default value, since we need atleast 2 to find the highest.
 	int num2 = 0,
@@ -191,8 +191,15 @@ int AB_FindLargest8(
 }
 
 
-void AB_ScaleDownTo8( //This could prolly do with a new name
-	int scaleTarget,
+/*!
+Scales a list of numbers down to fit within rangeMax (while still maintaining their relative position to eachother)
+if the ABSOLUTE value of one of numbers is greater than rangeMax.
+
+Ex1: Given a rangeMax of 100, [-110, 100, -90, 73, 13] would be scaled down to [-100, 90, -81, 66, 11]
+Ex2: Given a rangeMax of 100, [-100, 90, -81, 66, 11] would remain untouched, since none of the ABSOLUTE values are greater than rangeMax.
+*/
+void AB_ScaleIntoRange_8( //This could prolly do with a new name
+	int rangeMax,
 	int &num0,
 	int &num1, //The first two don't need a default value, since we need atleast 2
 	int &num2 = AB_NULL_INT,
@@ -205,10 +212,12 @@ void AB_ScaleDownTo8( //This could prolly do with a new name
 	const int MAX_NUMBERS = 8;
 	int &numbers[] = { num0, num1, num2, num3, num4, num5, num6, num7 };
 
-	int scaleFrom = AB_FindLargest8(num0, num1, num2, num3, num4, num5, num6, num7);
-	if (scaleFrom > scaleTarget) {
+	rangeMax = abs(rangeMax);
+
+	int scaleFrom = abs(AB_FindLargest_8(num0, num1, num2, num3, num4, num5, num6, num7));
+	if (scaleFrom > rangeMax) {
 		for (int i = 0; i < MAX_NUMBERS; i++) {
-			numbers[i] = AB_Scale(numbers[i], scaleFrom, scaleTarget);
+			numbers[i] = AB_Scale(numbers[i], scaleFrom, rangeMax);
 		}
 	}
 }
