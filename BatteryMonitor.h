@@ -10,8 +10,8 @@ short AB_batteryMonitorDelay_Passive = 10000; //Milliseconds
 short AB_batteryMonitorDelay_Active = 2000; //Milliseconds
 short _AB_batteryMonitorDelay = AB_batteryMonitorDelay_Passive;
 
-short AB_batteryMonitorThresholdNXT = 9123; //Millivolts //Made up value, should be tested
-short AB_batteryMonitorThresholdTETRIX = 9123; //Millivolts //Made up value, should be tested
+short AB_batteryMonitorThresholdNXT = 7000; //Millivolts //Made up value, should be tested
+short AB_batteryMonitorThresholdTETRIX = 7000; //Millivolts //Made up value, should be tested
 
 task _AB_BatteryMonitor()
 {
