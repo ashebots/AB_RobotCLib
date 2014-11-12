@@ -3,7 +3,8 @@
 #pragma systemFile //This is so the compiler doesn't complain about unused functions
 #pragma once //This is to make sure we don't include the same module twice
 
-#include "drivers\hitechnic-sensormux.h" //HiTechnic Sensor Multiplexer driver by Xander Soldaat. Link in readme
+#include "drivers/common.h"
+#include "drivers/hitechnic-sensormux.h" //HiTechnic Sensor Multiplexer driver by Xander Soldaat. Link in readme
 
 #define AB_BATTERYMONITOR_MODULE
 

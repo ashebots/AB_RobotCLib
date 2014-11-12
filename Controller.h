@@ -69,7 +69,7 @@ bool AB_ButtonState(AB_Gamepad button)
   { //Gamepad ONE
     if (button <= lastGamepad1Button)
     { //Button
-      return (bool)joy1Btn(button);
+      return (bool)joy1Btn( (TJoystickButtons)button );
     }
     else
     { //Tophat
@@ -81,7 +81,7 @@ bool AB_ButtonState(AB_Gamepad button)
   { //Gamepad TWO
     if (button <= lastGamepad2Button)
     { //Button
-      return (bool)joy2Btn(button - lastGamepad1Control);
+      return (bool)joy2Btn( (TJoystickButtons)(button - lastGamepad1Control) );
     }
     else
     { //Tophat
