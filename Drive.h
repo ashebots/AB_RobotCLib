@@ -55,9 +55,14 @@ typedef struct
   int numMotors;
   AB_DriveType driveType;
 
+  //Size of drive wheels
+  //It doesn't matter what unit of measurement is used, it just needs to be consistent
   float wheelRadius;
   float wheelDiameter;
   float wheelCircumference;
+  //Distance between the drive wheels //DESCRIBE DIS MOE BETTA
+  float drivebaseDiameter;
+  float drivebaseCircumference;
 
   tMotor encoder; //We currently only support one encoder for things like precision driving.
   int encoderTicksPerRotation;
@@ -316,6 +321,28 @@ void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowe
 	AB_StopDriving(chassis);
 }
 
+//Use encoder(s) to rotate the robot a 'precise' number of degrees.
+//A positve degree value rotates the robot to the right, a negative value rotates left. Just like a compass
+//360 degrees is equal to 1 rotation. Just like a compass
+//Ex: a value of -900 would rotate the robot 2 and a half times to the left
+void AB_RotateDegrees(AB_DriveChassis &chassis, int degrees, int drivePower)
+{
+	//Figure out how much to rotate
+	//From http://robotics.stackexchange.com/a/2786
+	int encoderTicksToTarget = chassis.data.encoderTicksPerRotation / (360/degrees) * (chassis.data.drivebaseDiameter/chassis.data.wheelDiameter);
+	//Reset encoder. May want to not do this, since they are now stored as LONG data type
+	nMotorEncoder[chassis.data.encoder] = 0;
+
+	AB_TankDrive(chassis, 0, drivePower);
+
+	while (abs(nMotorEncoder[chassis.data.encoder]) < encoderTicksToTarget)
+	{
+		EndTimeSlice();
+	}
+
+	AB_StopDriving(chassis);
+}
+
 
   //---------------------//
  //	CHASSIS API THINGY	//
@@ -372,6 +399,13 @@ float AB_GetWheelDiameter(AB_DriveChassis &chassis)
 float AB_GetWheelCircumference(AB_DriveChassis &chassis)
 {
 	return chassis.data.wheelCircumference;
+}
+
+//DRIVE BASE SIZE
+void AB_SetDrivebaseDiameter(AB_DriveChassis &chassis, float distance)
+{
+	chassis.data.drivebaseDiameter = distance;
+	chassis.data.drivebaseCircumference = distance * PI;
 }
 
 //DRIVE ENCODER
