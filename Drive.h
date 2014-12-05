@@ -328,17 +328,40 @@ void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowe
 void AB_RotateDegrees(AB_DriveChassis &chassis, int degrees, int drivePower)
 {
 	//Figure out how much to rotate
+	//Option No. 1
 	//From http://robotics.stackexchange.com/a/2786
-	int encoderTicksToTarget = chassis.data.encoderTicksPerRotation / (360/degrees) * (chassis.data.drivebaseDiameter/chassis.data.wheelDiameter);
-	//Reset encoder. May want to not do this, since they are now stored as LONG data type
-	nMotorEncoder[chassis.data.encoder] = 0;
+	//int encoderTicksToTarget = chassis.data.encoderTicksPerRotation / (360/degrees) * (chassis.data.drivebaseDiameter/chassis.data.wheelDiameter);
+	//Option No. 2
+	float encoderTicksToTarget = chassis.data.drivebaseCircumference / chassis.data.wheelCircumference;
+	encoderTicksToTarget /= (360.0 / abs(degrees));
+	encoderTicksToTarget *= chassis.data.encoderTicksPerRotation;
 
-	AB_TankDrive(chassis, 0, drivePower);
+	//WARNING: THIS WILL ONLY WORK WITH A 2 MOTOR TANK DRIVE ROBOT, WITH ENCODERS ON BOTH WHEELS
+	//YEAH, I'M LAZY. DEAL WITH IT WHEN WE NEED IT.
 
-	while (abs(nMotorEncoder[chassis.data.encoder]) < encoderTicksToTarget)
+	nMotorEncoder[chassis.wheels.left] = 0;
+	nMotorEncoder[chassis.wheels.right] = 0;
+
+	nMotorEncoderTarget[chassis.wheels.left] = encoderTicksToTarget;
+	nMotorEncoderTarget[chassis.wheels.right] = encoderTicksToTarget;
+
+
+	int rotationPower = drivePower * sgn(degrees); //whether we should turn left or right
+	AB_TankDrive(chassis, -rotationPower, rotationPower);
+
+
+	while ((nMotorRunState[chassis.wheels.left] != runStateIdle) || (nMotorRunState[chassis.wheels.right] != runStateIdle))
 	{
+		playSound(soundBeepBeep);
 		EndTimeSlice();
 	}
+	/* gross test
+	while (abs(nMotorEncoder[chassis.wheels.left]) < encoderTicksToTarget)
+	{
+		playSound(soundBeepBeep);
+		EndTimeSlice();
+	}
+	*/
 
 	AB_StopDriving(chassis);
 }
