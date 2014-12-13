@@ -179,6 +179,13 @@ void AB_TankDrive(AB_DriveChassis chassis, int leftInput, int rightInput)
 	  leftSidePower = AB_Clamp(leftSidePower, -100, 100);
 	  rightSidePower = AB_Clamp(rightSidePower, -100, 100);
 
+	  //Debug
+	  writeDebugStreamLine("--------------------");
+	  writeDebugStreamLine("leftInput = %d", leftInput);
+	  writeDebugStreamLine("rightInput = %d", rightInput);
+	  writeDebugStreamLine("leftSidePower = %d", leftSidePower);
+	  writeDebugStreamLine("rightSidePower = %d", rightSidePower);
+
 	  if ((chassis.data.numMotors == 2) || (chassis.data.numMotors == 6))
 	  {
 		  motor[chassis.wheels.left] = leftSidePower;
@@ -284,6 +291,7 @@ void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowe
 {
 	//Sanitize input
 	drivePower = AB_Clamp(drivePower, -100, 100);
+	drivePower = drivePower * sgn(distance); //Inverts drivePower if distance is negative
 
 	//Figure out how long we should drive
 	float rotationsToTarget = distance / chassis.data.wheelCircumference;
@@ -332,7 +340,7 @@ void AB_RotateDegrees(AB_DriveChassis &chassis, int degrees, int drivePower)
 	nMotorEncoderTarget[chassis.wheels.right] = encoderTicksToTarget;
 
 	int rotationPower = drivePower * sgn(degrees); //whether we should turn left or right
-	AB_TankDrive(chassis, -rotationPower, rotationPower);
+	AB_TankDrive(chassis, rotationPower, -rotationPower);
 
 	while ((nMotorRunState[chassis.wheels.left] != runStateIdle) || (nMotorRunState[chassis.wheels.right] != runStateIdle))
 	{
