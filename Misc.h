@@ -221,3 +221,141 @@ void AB_ScaleIntoRange_8( //This could prolly do with a new name
 		}
 	}
 }
+
+//ToDo: Document this!
+float AB_MatchArrays(ubyte *profile, ubyte *dataset, int length, int range = 0, int leniency = 0)
+{
+	writeDebugStreamLine("In function <MatchArrays>");
+	if (range < 0)
+		range = 0; //replace this with clamp?
+
+	range++; //Range has to be a minimum of 1, but that makes it seem like it looks for 1 on either side of the number, which it does not.
+
+	float numMatches = 0.0;
+	for (int index=0; index<length; index++)
+	{
+		//Check the number at the current index of the new dataset against (leniency*2)+1 number of numbers surrounding the corresponding index in the data profile.
+		//e.g. if our leniency=4, and our range=5, if we're looking at number dataset[13] in our new dataset, we check if it falls within <range>(5) of ANY of the numbers profile[13 - leniency] and profile[13 + leniency] (9 to 17 in this case)
+
+		float bestRangeMatch = 0.0;
+		int bestRangeMatchDistanceFromIndex = 0;
+
+		int leniencyIndex = 0; //Remove this declaration
+		int indexAtMatch; //for debug
+		for (leniencyIndex=(index-leniency); leniencyIndex<=(index+leniency); leniencyIndex++)
+		{
+			float rangeMatch = 1.0 / range * -AB_Diff(dataset[index], profile[leniencyIndex]) + 1.0; //Will decrease from 1 to 0 the farther away the match is, 1 being perfect number match, 0 being outside of range.
+
+			if (rangeMatch > bestRangeMatch)
+			{
+				bestRangeMatch = rangeMatch;
+				bestRangeMatchDistanceFromIndex = AB_Diff(leniencyIndex, index);
+				indexAtMatch = leniencyIndex; //for debug
+			}
+		}
+		float leniencyMatch = 1.0 / range * -(bestRangeMatchDistanceFromIndex/4.0) + 1.0;
+
+		float amountMatched = (bestRangeMatch * leniencyMatch);
+		if (amountMatched != 0)
+		{
+			writeDebugStreamLine("Match found for dataset[%d] (%d) at profile[%d] (%d) where bestRangeMatch=%f and leniencyMatch=%f", index, dataset[index], indexAtMatch, profile[indexAtMatch], bestRangeMatch, leniencyMatch);
+		}
+		numMatches += amountMatched;
+	}
+
+	float percentMatched = numMatches * 100.0 / length;
+	return percentMatched;
+}
+
+//ToDo: Document this!
+bool AB_LoadArray(ubyte *datasetArray, short datasetLength, string fileName)
+{
+	writeDebugStreamLine("In function <LoadArray>");
+
+	TFileHandle fileHandle;
+	TFileIOResult ioResult;
+  short fileSize = 0;
+	OpenRead(fileHandle, ioResult, fileName, fileSize);
+
+	if (ioResult == 0)
+	{
+		writeDebugStreamLine("Opened file");
+		short arrayIndex = 0;
+		for (int i=0; i<(fileSize/sizeof(ubyte)); i++)
+		{
+			if (arrayIndex < datasetLength) {
+				ubyte readResult = 0;
+				ReadByte(fileHandle, ioResult, readResult);
+				if (ioResult == 0)
+				{
+					writeDebugStreamLine("ReadByte #%d", i);
+					datasetArray[i] = readResult;
+				}
+				else
+				{
+					//Read error, abort
+					Close(fileHandle, ioResult);
+					return false;
+				}
+			}
+			else
+			{
+				//Array is full
+				Close(fileHandle, ioResult);
+				return true;
+			}
+
+			arrayIndex++;
+		}
+		//Read whole file successfully..hopefully
+		Close(fileHandle, ioResult);
+		return true;
+	}
+	else
+	{
+		//Couldn't open file
+		Close(fileHandle, ioResult);
+		return false;
+	}
+}
+
+//ToDo: Document this!
+bool AB_SaveArray(ubyte *datasetArray, short datasetLength, string fileName, bool force = true)
+{
+	writeDebugStreamLine("In function <SaveArray>");
+
+	TFileIOResult ioResult;
+
+	//Will delete the file first if it exists
+	if (force == true)
+	{
+		Delete(fileName, ioResult);
+	}
+
+	TFileHandle fileHandle;
+  short fileSize = datasetLength * sizeof(ubyte);
+
+	OpenWrite(fileHandle, ioResult, fileName, fileSize);
+	if (ioResult == 0)
+	{
+		for (short i=0; i<datasetLength; i++)
+		{
+			WriteByte(fileHandle, ioResult, datasetArray[i]);
+			if (ioResult != 0)
+			{
+				//Error saving to file
+				Close(fileHandle, ioResult);
+				return false;
+			}
+		}
+		//Hopefully wrote everything successfully
+		Close(fileHandle, ioResult);
+		return true;
+	}
+	else
+	{
+		//Couldn't open file for writing
+		Close(fileHandle, ioResult);
+		return false;
+	}
+}
