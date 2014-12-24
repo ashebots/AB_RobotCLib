@@ -286,6 +286,13 @@ void AB_StopDriving(AB_DriveChassis &chassis)
 	motor[chassis.wheels.backRight] = 0;
 }
 
+
+int AB_CalcEncoderTicksForDistance(AB_DriveChassis &chassis, float distance)
+{
+	float rotationsToTarget = distance / chassis.data.wheelCircumference;
+	return (int) rotationsToTarget * chassis.data.encoderTicksPerRotation;
+}
+
 //Use encoder(s) to drive a precise distance forward
 void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePower)
 {
@@ -294,8 +301,7 @@ void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowe
 	drivePower = drivePower * sgn(distance); //Inverts drivePower if distance is negative
 
 	//Figure out how long we should drive
-	float rotationsToTarget = distance / chassis.data.wheelCircumference;
-	int encoderTicksToTarget = rotationsToTarget * chassis.data.encoderTicksPerRotation;
+	int encoderTicksToTarget = AB_CalcEncoderTicksForDistance(chassis, distance);
 
 	//WARNING: THIS WILL ONLY WORK WITH A 2 MOTOR TANK DRIVE ROBOT, WITH ENCODERS ON BOTH WHEELS
 	//YEAH, I'M LAZY. DEAL WITH IT WHEN WE NEED IT.
