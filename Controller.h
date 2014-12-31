@@ -14,6 +14,7 @@
 //Set a variable for a control to one of these.
 typedef enum AB_Gamepad
 {
+	Undefined     = 0,
   X1            = 1, //First controller
   A1            = 2,
   B1            = 3,
