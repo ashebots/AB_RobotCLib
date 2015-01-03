@@ -290,7 +290,7 @@ void AB_StopDriving(AB_DriveChassis &chassis)
 int AB_CalcEncoderTicksForDistance(AB_DriveChassis &chassis, float distance)
 {
 	float rotationsToTarget = distance / chassis.data.wheelCircumference;
-	return (int) rotationsToTarget * chassis.data.encoderTicksPerRotation;
+	return (int) (rotationsToTarget * chassis.data.encoderTicksPerRotation);
 }
 
 //Use encoder(s) to drive a precise distance forward
