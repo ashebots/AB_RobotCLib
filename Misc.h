@@ -272,6 +272,8 @@ bool AB_LoadArray(ubyte *datasetArray, short datasetLength, string fileName)
 {
 	writeDebugStreamLine("In function <LoadArray>");
 
+	fileName = fileName + ".txt";
+
 	TFileHandle fileHandle;
 	TFileIOResult ioResult;
   short fileSize = 0;
@@ -323,6 +325,8 @@ bool AB_LoadArray(ubyte *datasetArray, short datasetLength, string fileName)
 bool AB_SaveArray(ubyte *datasetArray, short datasetLength, string fileName, bool force = true)
 {
 	writeDebugStreamLine("In function <SaveArray>");
+
+	fileName = fileName + ".txt";
 
 	TFileIOResult ioResult;
 
