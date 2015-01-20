@@ -363,3 +363,28 @@ bool AB_SaveArray(ubyte *datasetArray, short datasetLength, string fileName, boo
 		return false;
 	}
 }
+
+
+//By Xander Soldaat @BotBench // http://botbench.com/blog/2012/07/21/tutorial-sorting-your-data/
+//Shell sort, sorts low to high
+void AB_Sort(int *array, int length)
+{
+	int mid;
+	for(int m = length/2 ; m > 0; m /= 2)
+	{
+	  for(int j = m; j < length; j++)
+	  {
+	    for(int i = j - m; i >= 0; i -= m)
+	    {
+	      if(array[i + m] >= array[i])
+	        break;
+	      else
+	      {
+	        mid = array[i];
+	        array[i] = array[i + m];
+	        array[i + m] = mid;
+	      }
+	    }
+	  }
+	}
+}
