@@ -43,7 +43,7 @@ int AB_FirFilter(AB_FirData &data, int input)
   }
   int average = allValues / data.size;
 
-  if (data.position == data.size) //If we've filled our whole array, it's safe to use it.
+  if (data.position == (data.size - 1)) //If we've filled our whole array, it's safe to use it.
   {
     data.full = true; //CHECK THIS EVERYWHERE YOU CHECK THE OUTPUT!
   }
