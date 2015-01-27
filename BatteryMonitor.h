@@ -3,8 +3,13 @@
 #pragma systemFile //This is so the compiler doesn't complain about unused functions
 #pragma once //This is to make sure we don't include the same module twice
 
+#ifndef __COMMON_H__
 #include "drivers/common.h"
+#endif //__COMMON_H__
+
+#ifndef __HTSMUX_H__
 #include "drivers/hitechnic-sensormux.h" //HiTechnic Sensor Multiplexer driver by Xander Soldaat. Link in readme
+#endif //__HTSMUX_H__
 
 #define AB_BATTERYMONITOR_MODULE
 
@@ -15,8 +20,8 @@ short AB_BatteryMonitor_delayPassive = 10000; //Milliseconds
 short AB_BatteryMonitor_delayActive = 2000; //Milliseconds
 short _AB_BatteryMonitor_delay = AB_BatteryMonitor_delayPassive;
 
-short AB_BatteryMonitor_thresholdNXT = 7000; //Millivolts //Made up value, should be tested
-short AB_BatteryMonitor_thresholdTETRIX = 7000; //Millivolts //Made up value, should be tested
+short AB_BatteryMonitor_thresholdNXT = 7500; //Millivolts //Made up value, should be tested
+short AB_BatteryMonitor_thresholdTETRIX = 10500; //Millivolts //Made up value, should be tested
 
 //Internal variables for tracking what SMUX(es?) to check batteries of.
 tSensors _AB_BatteryMonitor_SMUXList[4];
