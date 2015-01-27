@@ -287,11 +287,16 @@ int AB_CalcEncoderTicksForDistance(AB_DriveChassis &chassis, float distance)
 }
 
 //Use encoder(s) to drive a precise distance forward
-void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePower)
+//It is generally best to use only one drive power input (via overload below),
+//rather than seperate ones for left and right.
+void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowerLeft, int drivePowerRight)
 {
 	//Sanitize input
-	drivePower = AB_Clamp(drivePower, -100, 100);
-	drivePower = drivePower * sgn(distance); //Inverts drivePower if distance is negative
+	drivePowerLeft = AB_Clamp(drivePowerLeft, -100, 100);
+	drivePowerRight = AB_Clamp(drivePowerRight, -100, 100);
+
+	drivePowerLeft = abs(drivePowerLeft) * sgn(distance); //Inverts drivePower if distance is negative
+	drivePowerRight = abs(drivePowerRight) * sgn(distance); //Inverts drivePower if distance is negative
 
 	//Figure out how long we should drive
 	int encoderTicksToTarget = AB_CalcEncoderTicksForDistance(chassis, distance);
@@ -305,14 +310,19 @@ void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowe
 	nMotorEncoderTarget[chassis.wheels.left] = encoderTicksToTarget;
 	nMotorEncoderTarget[chassis.wheels.right] = encoderTicksToTarget;
 
-	AB_TankDrive(chassis, drivePower, drivePower);
+	AB_TankDrive(chassis, drivePowerLeft, drivePowerRight);
 
-	while ((nMotorRunState[chassis.wheels.left] != runStateIdle) || (nMotorRunState[chassis.wheels.right] != runStateIdle))
+	while ((nMotorRunState[chassis.wheels.left] != runStateIdle) && (nMotorRunState[chassis.wheels.right] != runStateIdle))
 	{
 		EndTimeSlice();
 	}
 
 	AB_StopDriving(chassis);
+}
+
+void AB_DriveForDistance(AB_DriveChassis chassis, float distance, int drivePower)
+{
+	AB_DriveForDistance(chassis, distance, drivePower, drivePower);
 }
 
 //Use encoder(s) to rotate the robot a 'precise' number of degrees.
