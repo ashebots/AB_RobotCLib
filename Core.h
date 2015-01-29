@@ -10,6 +10,19 @@ int AB_NULL_INT = 0;
 float AB_NULL_FLOAT = 0.0;
 
 
+//Use these to allow the user to choose what type of operator to use for certain functions.
+//List taken from Wikipedia (http://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B)
+/*
+Ex: For the DriveForDistance function, passing AND will wait until both encoders reach the target,
+but passing OR will wait until either wheel encoder reaches the target.
+*/
+typedef enum AB_Operator
+{
+	//Logical
+	NOT,
+	AND,
+	OR,
+} AB_Operator;
 
 
 /*

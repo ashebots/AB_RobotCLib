@@ -287,9 +287,13 @@ int AB_CalcEncoderTicksForDistance(AB_DriveChassis &chassis, float distance)
 }
 
 //Use encoder(s) to drive a precise distance forward
-//It is generally best to use only one drive power input (via overload below),
-//rather than seperate ones for left and right.
-void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowerLeft, int drivePowerRight)
+/* It is generally best to use only one drive power input (via overload below),
+rather than seperate ones for left and right. */
+/* NOTE: By default this function waits for EITHER encoder to reach the target, then stops (best for 2 speeds).
+The overload below waits until BOTH encoders have reached the target, then stops (best for 1  speed).
+Note: AND means either, and OR means wait for both. Logical, right?
+*/
+void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowerLeft, int drivePowerRight, AB_Operator waitUntilType = AND)
 {
 	//Sanitize input
 	drivePowerLeft = AB_Clamp(drivePowerLeft, -100, 100);
@@ -312,17 +316,31 @@ void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowe
 
 	AB_TankDrive(chassis, drivePowerLeft, drivePowerRight);
 
-	while ((nMotorRunState[chassis.wheels.left] != runStateIdle) && (nMotorRunState[chassis.wheels.right] != runStateIdle))
+	if (waitUntilType == AND)
 	{
-		EndTimeSlice();
+		writeDebugStreamLine("In DriveForDistance, waitUntilType == AND");
+		while ((nMotorRunState[chassis.wheels.left] != runStateIdle) && (nMotorRunState[chassis.wheels.right] != runStateIdle))
+		{
+			EndTimeSlice();
+		}
+	}
+	else //assumed to be OR, but we're just gonna throw the other cases in here just in case. #YOLO
+	{
+		writeDebugStreamLine("In DriveForDistance, waitUntilType == OR");
+		while ((nMotorRunState[chassis.wheels.left] != runStateIdle) || (nMotorRunState[chassis.wheels.right] != runStateIdle))
+		{
+			EndTimeSlice();
+		}
 	}
 
 	AB_StopDriving(chassis);
 }
 
-void AB_DriveForDistance(AB_DriveChassis chassis, float distance, int drivePower)
+/* NOTE: By default this function waits until BOTH encoders have reached the target, then stops (best for 1  speed).
+The overload above waits for EITHER encoder to reach the target, then stops (best for 2 speeds). */
+void AB_DriveForDistance(AB_DriveChassis chassis, float distance, int drivePower, AB_Operator waitUntilType = OR)
 {
-	AB_DriveForDistance(chassis, distance, drivePower, drivePower);
+	AB_DriveForDistance(chassis, distance, drivePower, drivePower, waitUntilType);
 }
 
 //Use encoder(s) to rotate the robot a 'precise' number of degrees.
@@ -350,10 +368,11 @@ void AB_RotateDegrees(AB_DriveChassis &chassis, int degrees, int drivePower)
 
 	int rotationPower = drivePower * sgn(degrees); //whether we should turn left or right
 	AB_TankDrive(chassis, rotationPower, -rotationPower);
-
+writeDebugStreamLine("encoderTicksToTarget = %d", encoderTicksToTarget);
 	while ((nMotorRunState[chassis.wheels.left] != runStateIdle) || (nMotorRunState[chassis.wheels.right] != runStateIdle))
 	{
 		EndTimeSlice();
+		//writeDebugStreamLine("%d | %d", nMotorEncoder[chassis.wheels.left], nMotorEncoder[chassis.wheels.right]);
 	}
 
 	AB_StopDriving(chassis);
