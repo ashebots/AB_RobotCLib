@@ -52,6 +52,8 @@ typedef struct
 {
   int drivePower;
   int rotationPower;
+  float gearRatio; //Kinda untested..
+
   int numMotors;
   AB_DriveType driveType;
 
@@ -64,7 +66,7 @@ typedef struct
   float drivebaseDiameter;
   float drivebaseCircumference;
 
-  tMotor encoder; //We currently only support one encoder for things like precision driving.
+  tMotor encoder; //We currently only support one encoder for things like precision driving. //This is actually unused atm.
   int encoderTicksPerRotation;
 } AB_DriveData;
 
@@ -283,7 +285,8 @@ void AB_StopDriving(AB_DriveChassis &chassis)
 int AB_CalcEncoderTicksForDistance(AB_DriveChassis &chassis, float distance)
 {
 	float rotationsToTarget = distance / chassis.data.wheelCircumference;
-	return (int) (rotationsToTarget * chassis.data.encoderTicksPerRotation);
+	rotationsToTarget *= chassis.data.encoderTicksPerRotation;
+	return (int) (rotationsToTarget * chassis.data.gearRatio);
 }
 
 //Use encoder(s) to drive a precise distance forward
@@ -291,9 +294,9 @@ int AB_CalcEncoderTicksForDistance(AB_DriveChassis &chassis, float distance)
 rather than seperate ones for left and right. */
 /* NOTE: By default this function waits for EITHER encoder to reach the target, then stops (best for 2 speeds).
 The overload below waits until BOTH encoders have reached the target, then stops (best for 1  speed).
-Note: AND means either, and OR means wait for both. Logical, right?
+Note: OR means either, and AND means wait for both.
 */
-void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowerLeft, int drivePowerRight, AB_Operator waitUntilType = AND)
+void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowerLeft, int drivePowerRight, AB_Operator waitUntilType = OR)
 {
 	//Sanitize input
 	drivePowerLeft = AB_Clamp(drivePowerLeft, -100, 100);
@@ -316,17 +319,18 @@ void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowe
 
 	AB_TankDrive(chassis, drivePowerLeft, drivePowerRight);
 
-	if (waitUntilType == AND)
+	if (waitUntilType == OR) //Note: Even though we use the && operator, we treat this as "OR" because we wait for BOTH encoders to reach their target
 	{
-		writeDebugStreamLine("In DriveForDistance, waitUntilType == AND");
+		writeDebugStreamLine("In DriveForDistance, waitUntilType == OR");
 		while ((nMotorRunState[chassis.wheels.left] != runStateIdle) && (nMotorRunState[chassis.wheels.right] != runStateIdle))
 		{
 			EndTimeSlice();
 		}
 	}
-	else //assumed to be OR, but we're just gonna throw the other cases in here just in case. #YOLO
+	//Assumed to be "AND", or an edge case that should be treated as such.
+	else //Note: Even though we use the || operator, we treat this as "AND" because we wait for EITHER encoder to reach its target
 	{
-		writeDebugStreamLine("In DriveForDistance, waitUntilType == OR");
+		writeDebugStreamLine("In DriveForDistance, waitUntilType == AND");
 		while ((nMotorRunState[chassis.wheels.left] != runStateIdle) || (nMotorRunState[chassis.wheels.right] != runStateIdle))
 		{
 			EndTimeSlice();
@@ -338,7 +342,7 @@ void AB_DriveForDistance(AB_DriveChassis &chassis, float distance, int drivePowe
 
 /* NOTE: By default this function waits until BOTH encoders have reached the target, then stops (best for 1  speed).
 The overload above waits for EITHER encoder to reach the target, then stops (best for 2 speeds). */
-void AB_DriveForDistance(AB_DriveChassis chassis, float distance, int drivePower, AB_Operator waitUntilType = OR)
+void AB_DriveForDistance(AB_DriveChassis chassis, float distance, int drivePower, AB_Operator waitUntilType = AND)
 {
 	AB_DriveForDistance(chassis, distance, drivePower, drivePower, waitUntilType);
 }
@@ -404,6 +408,17 @@ int AB_GetRotationPower(AB_DriveChassis &chassis)
   return chassis.data.rotationPower;
 }
 
+//GEAR RATIO
+//Not really implemented yet, as of 1/19/15
+void AB_SetGearRatio(AB_DriveChassis &chassis, int inputTeeth, int outputTeeth)
+{
+  chassis.data.gearRatio = (float) (inputTeeth / outputTeeth);
+}
+float AB_GetGearRatio(AB_DriveChassis &chassis)
+{
+  return chassis.data.gearRatio;
+}
+
 //DRIVE TYPE
 AB_DriveType AB_GetDriveType(AB_DriveChassis &chassis)
 {
@@ -459,6 +474,7 @@ void AB_InitGeneralChassisSettings(AB_DriveChassis &chassis)
 {
 	chassis.data.drivePower = 100;
 	chassis.data.rotationPower = 100;
+	chassis.data.gearRatio = 1; //Assume that there are no gears on drive wheels. Can be set later.
 	chassis.data.encoderTicksPerRotation = AB_defaultEncoderTicksPerRotation;
 }
 
