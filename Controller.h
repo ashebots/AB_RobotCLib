@@ -58,14 +58,15 @@ typedef enum AB_Gamepad
   HatUpLeft2    = 40,
 };
 
+const int numGamepadControls = 20; //How many controls/buttons there are on each controller/gamepad
+
+const int lastGamepad1Control = HatUpLeft1; //A "Control" encompasses all the buttons + the 8 different TopHats.
+
+const int lastGamepad1Button = RightJoy1; //A "Button" is everything other than a TopHat.
+const int lastGamepad2Button = RightJoy2;
 
 bool AB_ButtonState(AB_Gamepad button)
 {
-  const int lastGamepad1Control = HatUpLeft1; //A "Control" encompasses all the buttons + the 8 different TopHats.
-
-  const int lastGamepad1Button = RightJoy1; //A "Button" is everything other than a TopHat.
-  const int lastGamepad2Button = RightJoy2;
-
   if (button <= lastGamepad1Control)
   { //Gamepad ONE
     if (button <= lastGamepad1Button)
@@ -90,6 +91,11 @@ bool AB_ButtonState(AB_Gamepad button)
       return (askedForTopHat == joystick.joy2_TopHat);
     }
   }
+}
+
+//Give a button, returns the corresponding button on the other controller.
+AB_Gamepad AB_SwitchGamepad(AB_Gamepad button)
+{
 }
 
 /*!
