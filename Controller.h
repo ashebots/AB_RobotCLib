@@ -96,6 +96,22 @@ bool AB_ButtonState(AB_Gamepad button)
 //Give a button, returns the corresponding button on the other controller.
 AB_Gamepad AB_SwitchGamepad(AB_Gamepad button)
 {
+	//If the button is undefined, we can't switched it, so just return undefined.
+	if (button == Undefined)
+	{
+		return Undefined;
+	}
+	else
+	{
+		if (button <= numGamepadControls) //Button is on 1st controller
+		{
+			return button + 20;
+		}
+		else //Button is on 2nd controller
+		{
+			return button - 20;
+		}
+	}
 }
 
 /*!
